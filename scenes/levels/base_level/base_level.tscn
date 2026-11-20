@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsuxu8fw11doo"]
+
+[ext_resource type="Texture2D" uid="uid://b7tbmxrtmd08g" path="res://assets/sprites/tiles/base-level/base-level-tile.tres" id="1_rwgnx"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_rwgnx"]
+tile_data = PackedInt32Array(0, 3, 0, 65536, 65539, 0, 1, 65539, 0, 65537, 3, 0)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0jlsv"]
+texture = ExtResource("1_rwgnx")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_s0xcx"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 0
+sources/3 = SubResource("TileSetAtlasSource_0jlsv")
+pattern_0 = SubResource("TileMapPattern_rwgnx")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0)
+tile_set = SubResource("TileSet_s0xcx")
