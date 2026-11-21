@@ -14,6 +14,13 @@ func get_parent_state() -> HsmState:
 
 
 func add_transition(transition: HsmTransition) -> void:
+	if transition == null:
+		push_warning("HSM: Tentativa de registrar transição nula")
+		return
+
+	if not is_instance_valid(transition.target):
+		push_warning("HSM: Transição sem destino válido")
+
 	var event := transition.trigger
 
 	if not transitions.has(event):

@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://c1yjy78q87gbg"]
+
+[ext_resource type="Script" uid="uid://3x6o0xnhixh" path="res://scenes/tests/hsm_test.gd" id="1_fkvws"]
+[ext_resource type="Script" uid="uid://bxvkp17wulbgs" path="res://scripts/class/state_machine/hsm_state_machine.gd" id="1_w5ykd"]
+[ext_resource type="Script" uid="uid://d05qe306rrlnx" path="res://scenes/tests/hsm_debug_state.gd" id="2_fkvws"]
+
+[node name="HsmTest" type="Node"]
+script = ExtResource("1_fkvws")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("root_state")]
+script = ExtResource("1_w5ykd")
+root_state = NodePath("Locomotion")
+metadata/_custom_type_script = "uid://bxvkp17wulbgs"
+
+[node name="Locomotion" type="Node" parent="StateMachine" node_paths=PackedStringArray("initial_child")]
+script = ExtResource("2_fkvws")
+initial_child = NodePath("Grounded")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Grounded" type="Node" parent="StateMachine/Locomotion" node_paths=PackedStringArray("initial_child")]
+script = ExtResource("2_fkvws")
+initial_child = NodePath("Idle")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Idle" type="Node" parent="StateMachine/Locomotion/Grounded"]
+script = ExtResource("2_fkvws")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Running" type="Node" parent="StateMachine/Locomotion/Grounded"]
+script = ExtResource("2_fkvws")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Airborne" type="Node" parent="StateMachine/Locomotion" node_paths=PackedStringArray("initial_child")]
+script = ExtResource("2_fkvws")
+initial_child = NodePath("Falling")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Rising" type="Node" parent="StateMachine/Locomotion/Airborne"]
+script = ExtResource("2_fkvws")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Falling" type="Node" parent="StateMachine/Locomotion/Airborne"]
+script = ExtResource("2_fkvws")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"

@@ -2,6 +2,8 @@ class_name HsmTransition
 extends RefCounted
 
 
+const AUTO_TRIGGER: StringName = &""
+
 var target: HsmState
 var trigger: StringName
 var priority: int = 0
@@ -28,9 +30,13 @@ func can_trigger(
 
 	if event != trigger:
 		return false
+
+	# transição automática com guard
+	if trigger == AUTO_TRIGGER and guard.is_null():
+		return false
 	
 	# transição sem guard é permitida pelo trigger
-	if guard == Callable():
+	if guard.is_null():
 		return true
 	
 	# guard inválido bloqueia transição
