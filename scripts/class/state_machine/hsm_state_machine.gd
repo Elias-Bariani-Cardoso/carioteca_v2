@@ -149,6 +149,22 @@ func _drain_events() -> void:
 func _perform_transition(
 	transition: HsmTransition
 ) -> void:
+	if transition == null:
+		return
+
+	if not is_instance_valid(transition.source):
+		push_warning("HSM: Origem da transição inválida")
+		return
+
+	if not active_state_path.has(transition.source):
+		push_warning("HSM: Origem não está ativa")
+		return
+
+	# TRANSIÇÃO INTERNA: somente efeito
+	if transition.kind == HsmTransition.TransitionKind.INTERNAL:
+		if transition.effect.is_valid():
+			transition.effect.call(context)
+		return
 
 	var target_path := _build_target_path(
 		transition.target
@@ -176,29 +192,73 @@ func _perform_transition(
 
 		common_count += 1
 
-	# sai da folha até o ancestral em comum
-	while active_state_path.size() > common_count:
-		var state: HsmState = active_state_path.back()
-		state.exit(context)
-		active_state_path.pop_back()
+	# TRANSIÇÃO LOCAL: preserva o estado da origem
+	if transition.kind == HsmTransition.TransitionKind.LOCAL:
+		if(
+			transition.target == transition.source
+			or not target_path.has(transition.source)
+		):
+			push_warning("HSM: Destino local inválido.")
+			return
 
-	# executa efeito de transição
-	if transition.effect.is_valid():
-		transition.effect.call(context)
+	#TRANSIÇÃO EXTERNA: reentra nos estados necessários
+	elif transition.kind == HsmTransition.TransitionKind.EXTERNAL:
+		var source_index: int = active_state_path.find(
+			transition.source
+		)
 
-	# vai do ancestral em comum até a nova folha
-	for index in range(common_count, target_path.size()):
-		var state: HsmState = target_path[index]
-		active_state_path.append(state)
-		state.enter(context)
+		var target_index: int = active_state_path.find(
+			transition.target
+		)
 
-	# valida se o caminho mudou
-	var path_change : bool = (
+		# se origem e destino possuem relação ancestral
+		# precisamos reentrar no estado correspondente
+		if (
+			target_path.has(transition.source)
+			or target_index >= 0
+		):
+			var reentry_index: int = source_index
+
+			if target_index >= 0:
+				reentry_index = mini(
+					reentry_index,
+					target_index
+				)
+
+			common_count = mini(
+				common_count,
+				reentry_index
+			)
+		
+	else:
+		push_warning("HSM: Tipo de transição desconhecido.")
+		return
+
+	var has_lifecycle_change: bool = (
 		common_count < active_state_path.size()
 		or common_count < target_path.size()
 	)
 
-	if path_change:
+	# EXIT: da folha até o ancestral/limite compartilhado
+	while active_state_path.size() > common_count:
+		var state: HsmState = active_state_path.back()
+
+		state.exit(context)
+		active_state_path.pop_back()
+
+	# EFFECT: executa efeito de transição
+	if transition.effect.is_valid():
+		transition.effect.call(context)
+
+	# ENTER: vai do ancestral/limite compartilhado até a nova folha
+	for index in range(common_count, target_path.size()):
+		var state: HsmState = target_path[index]
+
+		active_state_path.append(state)
+		state.enter(context)
+
+	# valida se o caminho mudou
+	if has_lifecycle_change:
 		transitioned.emit(
 			previous_state,
 			get_active_state()
@@ -273,6 +333,13 @@ func _evaluate_automatic_transitions() -> void:
 
 		# nenhuma condição automática foi satisfeita
 		if transition == null:
+			break
+
+		# proteção contra transição interna automática
+		if transition.kind == HsmTransition.TransitionKind.INTERNAL:
+			push_warning(
+				"HSM: Transição interna automática não suportada"
+			)
 			break
 
 		var target_path := _build_target_path(

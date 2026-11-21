@@ -2,11 +2,20 @@ class_name HsmTransition
 extends RefCounted
 
 
+enum TransitionKind{
+	EXTERNAL,
+	LOCAL,
+	INTERNAL
+}
+
 const AUTO_TRIGGER: StringName = &""
 
+var source: HsmState
 var target: HsmState
 var trigger: StringName
 var priority: int = 0
+
+var kind: TransitionKind = TransitionKind.EXTERNAL
 
 var guard: Callable = Callable()
 var effect: Callable = Callable()
@@ -17,10 +26,12 @@ func _init(
 	p_target: HsmState,
 	p_trigger: StringName,
 	p_priority: int = 0,
+	p_kind: TransitionKind = TransitionKind.EXTERNAL
 ) -> void:
 	target = p_target
 	trigger = p_trigger
 	priority = p_priority
+	kind = p_kind
 
 
 func can_trigger(
