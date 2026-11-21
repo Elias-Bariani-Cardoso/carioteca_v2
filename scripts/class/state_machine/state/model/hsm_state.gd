@@ -5,7 +5,7 @@ extends Node
 @export var initial_child: HsmState
 
 # conjunto de transições/arestas
-var transitions: Array[HsmTransition] = []
+var transitions: Dictionary = {}
 
 
 
@@ -14,13 +14,19 @@ func get_parent_state() -> HsmState:
 
 
 func add_transition(transition: HsmTransition) -> void:
-	if transition == null:
-		return
+	var event := transition.trigger
 
-	transitions.append(transition)
+	if not transitions.has(event):
+		transitions[event] = []
+
+	transitions[event].append(transition)
 
 
-func enter(_context: HsmContext, _delta: float) -> void:
+func get_transitions(event: StringName) -> Array:
+	return transitions.get(event, [])
+
+
+func enter(_context: HsmContext) -> void:
 	pass
 
 
