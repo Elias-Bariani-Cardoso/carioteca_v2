@@ -50,6 +50,12 @@ func request_jump() -> void:
 
 
 
+# verificação para impedir colisão entre condições de pulo e landing
+func has_pending_jump() -> bool:
+	return _jump_requested
+
+
+
 # implementação do contrato IDomainMotor
 func physics_tick(delta: float) -> void:
 	if not is_instance_valid(body):
