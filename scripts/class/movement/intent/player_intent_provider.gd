@@ -31,6 +31,5 @@ func capture()-> void:
 
 	# comando discreto: input -> HSM
 	if Input.is_action_just_pressed(&"jump"):
-		print("INPUT: Pulo pressionado!")
 		if is_instance_valid(machine):
 			machine.send_event(&"jump_pressed") 
