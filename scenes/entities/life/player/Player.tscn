@@ -1,0 +1,72 @@
+[gd_scene load_steps=12 format=3 uid="uid://cu4jbvrop78tq"]
+
+[ext_resource type="Script" uid="uid://bm8h67qpcxhsy" path="res://scenes/entities/life/player/player.gd" id="1_ddiq3"]
+[ext_resource type="Script" uid="uid://c01idq0m17maq" path="res://scripts/class/movement/intent/player_intent_provider.gd" id="1_mrtxq"]
+[ext_resource type="Script" uid="uid://csa70l7b6nio1" path="res://scripts/class/movement/sensors/movement_sensors.gd" id="2_ddiq3"]
+[ext_resource type="Script" uid="uid://cbmw5b66ejdfh" path="res://scripts/class/movement/motor/movement_motor.gd" id="3_mqqpv"]
+[ext_resource type="Script" uid="uid://qb4t37whhs0y" path="res://scripts/class/movement/motor/components/horizontal_movement.gd" id="4_07fb0"]
+[ext_resource type="Script" uid="uid://dtyj5hsj2bleo" path="res://scripts/class/movement/motor/components/vertical_movement.gd" id="5_14f3g"]
+[ext_resource type="Script" uid="uid://bxvkp17wulbgs" path="res://scripts/class/state_machine/hsm_state_machine.gd" id="6_23r25"]
+[ext_resource type="Script" uid="uid://cjob6v1uxm2r1" path="res://scripts/class/state_machine/state/model/hsm_state.gd" id="7_6nfmm"]
+[ext_resource type="Script" uid="uid://bt5xo7jql7q8d" path="res://scenes/entities/life/player/states/player_grounded_movement_state.gd" id="9_07fb0"]
+[ext_resource type="Script" uid="uid://0dkc72ap41nc" path="res://scenes/entities/life/player/states/player_airborne_movement_state.gd" id="10_14f3g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrtxq"]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_ddiq3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mrtxq")
+
+[node name="MovementPlayerIntentProvider" type="Node" parent="."]
+script = ExtResource("1_mrtxq")
+metadata/_custom_type_script = "uid://c01idq0m17maq"
+
+[node name="MovementSensors" type="Node" parent="."]
+script = ExtResource("2_ddiq3")
+metadata/_custom_type_script = "uid://csa70l7b6nio1"
+
+[node name="MovementMotor" type="Node" parent="."]
+script = ExtResource("3_mqqpv")
+metadata/_custom_type_script = "uid://cbmw5b66ejdfh"
+
+[node name="HorizontalMovement" type="Node" parent="MovementMotor"]
+script = ExtResource("4_07fb0")
+metadata/_custom_type_script = "uid://qb4t37whhs0y"
+
+[node name="VerticalMovement" type="Node" parent="MovementMotor"]
+script = ExtResource("5_14f3g")
+metadata/_custom_type_script = "uid://dtyj5hsj2bleo"
+
+[node name="MovementStateMachine" type="Node" parent="."]
+script = ExtResource("6_23r25")
+metadata/_custom_type_script = "uid://bxvkp17wulbgs"
+
+[node name="Locomotion" type="Node" parent="MovementStateMachine"]
+script = ExtResource("7_6nfmm")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Grounded" type="Node" parent="MovementStateMachine/Locomotion"]
+script = ExtResource("9_07fb0")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Idle" type="Node" parent="MovementStateMachine/Locomotion/Grounded"]
+script = ExtResource("7_6nfmm")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Running" type="Node" parent="MovementStateMachine/Locomotion/Grounded"]
+script = ExtResource("7_6nfmm")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Airborne" type="Node" parent="MovementStateMachine/Locomotion"]
+script = ExtResource("10_14f3g")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Rising" type="Node" parent="MovementStateMachine/Locomotion/Airborne"]
+script = ExtResource("7_6nfmm")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Falling" type="Node" parent="MovementStateMachine/Locomotion/Airborne"]
+script = ExtResource("7_6nfmm")
+metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
