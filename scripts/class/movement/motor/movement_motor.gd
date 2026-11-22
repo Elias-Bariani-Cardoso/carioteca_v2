@@ -64,17 +64,21 @@ func physics_tick(delta: float) -> void:
 	if not is_instance_valid(sensors):
 		return
 
-	horizontal.calculate(
+	var next_x: float = horizontal.calculate(
 		body.velocity.x,
 		horizontal_intent,
 		delta
 	)
 
-	vertical.calculate(
+	var next_y: float = vertical.calculate(
 		body.velocity.y,
 		sensors.is_grounded,
 		_jump_requested,
 		delta
 	)
 
+	# aplica os resultados ao CharacterBody2D
+	body.velocity = Vector2(next_x, next_y)
+
+	# consome solicitação de pulo
 	_jump_requested = false

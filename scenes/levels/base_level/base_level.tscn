@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsuxu8fw11doo"]
+[gd_scene load_steps=6 format=3 uid="uid://dsuxu8fw11doo"]
 
 [ext_resource type="Texture2D" uid="uid://b7tbmxrtmd08g" path="res://assets/sprites/tiles/base-level/base-level-tile.tres" id="1_rwgnx"]
+[ext_resource type="PackedScene" uid="uid://cu4jbvrop78tq" path="res://scenes/entities/life/player/Player.tscn" id="2_0jlsv"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_rwgnx"]
 tile_data = PackedInt32Array(0, 3, 0, 65536, 65539, 0, 1, 65539, 0, 65537, 3, 0)
@@ -23,3 +24,6 @@ pattern_0 = SubResource("TileMapPattern_rwgnx")
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_s0xcx")
+
+[node name="Player" parent="." instance=ExtResource("2_0jlsv")]
+position = Vector2(19, -31)
