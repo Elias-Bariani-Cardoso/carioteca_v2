@@ -40,12 +40,14 @@ metadata/_custom_type_script = "uid://qb4t37whhs0y"
 script = ExtResource("5_14f3g")
 metadata/_custom_type_script = "uid://dtyj5hsj2bleo"
 
-[node name="MovementStateMachine" type="Node" parent="."]
+[node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("root_state")]
 script = ExtResource("6_23r25")
+root_state = NodePath("Locomotion")
 metadata/_custom_type_script = "uid://bxvkp17wulbgs"
 
-[node name="Locomotion" type="Node" parent="MovementStateMachine"]
+[node name="Locomotion" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("initial_child")]
 script = ExtResource("7_6nfmm")
+initial_child = NodePath("Grounded")
 metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
 
 [node name="Grounded" type="Node" parent="MovementStateMachine/Locomotion"]
@@ -60,8 +62,9 @@ metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
 script = ExtResource("7_6nfmm")
 metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
 
-[node name="Airborne" type="Node" parent="MovementStateMachine/Locomotion"]
+[node name="Airborne" type="Node" parent="MovementStateMachine/Locomotion" node_paths=PackedStringArray("initial_child")]
 script = ExtResource("10_14f3g")
+initial_child = NodePath("Falling")
 metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
 
 [node name="Rising" type="Node" parent="MovementStateMachine/Locomotion/Airborne"]
@@ -71,3 +74,5 @@ metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
 [node name="Falling" type="Node" parent="MovementStateMachine/Locomotion/Airborne"]
 script = ExtResource("7_6nfmm")
 metadata/_custom_type_script = "uid://cjob6v1uxm2r1"
+
+[node name="Camera2D" type="Camera2D" parent="."]

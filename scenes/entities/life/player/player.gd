@@ -42,6 +42,8 @@ func _ready() -> void:
 	movement_context.motor = movement_motor
 
 	# registrar transições de movimento antes dessa chamada:
+	_register_movement_transitions()
+	# iniciar máquina
 	movement_machine.initialize(movement_context)
 
 
@@ -128,7 +130,7 @@ func _register_movement_transitions() -> void:
 	)
 
 	apex.guard = func(ctx: HsmContext) -> bool:
-		var feedback := ctx.sensors as MovementMotor
+		var feedback := ctx.sensors as MovementSensors
 		return feedback != null and feedback.is_falling()
 
 	rising.add_transition(apex)
