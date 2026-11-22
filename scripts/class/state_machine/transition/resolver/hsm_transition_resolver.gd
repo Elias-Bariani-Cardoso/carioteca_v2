@@ -31,8 +31,14 @@ func resolve(
 			if transition == null:
 				continue
 
-			if not is_instance_valid(transition.target):
+			# confere se transição pertence ao estado consultado
+			if transition.source != state:
 				continue
+
+			# somente transições internas podem não possuir destino
+			if transition.kind != HsmTransition.TransitionKind.INTERNAL:
+				if not is_instance_valid(transition.target):
+					continue
 
 			# valida trigger e guard
 			if not transition.can_trigger(event, context):
