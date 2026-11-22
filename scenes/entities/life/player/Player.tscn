@@ -14,6 +14,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrtxq"]
 
 [node name="Player" type="CharacterBody2D"]
+collision_layer = 2
 script = ExtResource("1_ddiq3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
